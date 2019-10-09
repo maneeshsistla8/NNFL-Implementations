@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import math
 
-def LikelihoodRatioTest(test, train):
+def MaximumLikelihood(test, train):
 	acc, acc1, acc2, acc3 = 0, 0, 0, 0
 	train_label1_features = train.iloc[:, :7].loc[train['label'] == 1]
 	train_label2_features = train.iloc[:, :7].loc[train['label'] == 2]
@@ -63,6 +63,6 @@ test = data.drop(train.index)
 train.rename(columns={train.columns[-1]:'label'}, inplace=True)
 test.rename(columns={test.columns[-1]:'label'}, inplace=True)
 
-accuracy, accuracy_1, accuracy_2, accuracy_3 = LikelihoodRatioTest(test, train)
+accuracy, accuracy_1, accuracy_2, accuracy_3 =  MaximumLikelihood(test, train)
 print("Overall accuracy is {}".format(accuracy))
 print("Individual class accuracies are {}, {}, {}".format(accuracy_1, accuracy_2, accuracy_3))

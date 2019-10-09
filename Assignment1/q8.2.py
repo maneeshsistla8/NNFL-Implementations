@@ -13,8 +13,9 @@ def LogisticRegression(train, theta, iters, alpha, class_label):
 	m = Y.shape[0]
 
 	for i in range(len(Y)):
-		Y[i] -= class_label
-		if(Y[i] != 0):
+		if(Y[i] != class_label):
+			Y[i] = 0
+		else:
 			Y[i] = 1
 			
 	for i in range(iters):
@@ -53,12 +54,12 @@ def Accuracy(test, theta_1, theta_2, theta_3):
 		a = 1 if h1[index] > 0.5 else 0
 		b = 1 if h2[index] > 0.5 else 0
 		c = 1 if h3[index] > 0.5 else 0
-		c1 += (a == 0)
-		c1 += (c == 1)
-		c2 += (a == 1)
-		c2 += (b == 0)
-		c3 += (b == 1)
-		c3 += (c == 0)
+		c1 += (a == 1)
+		c1 += (c == 0)
+		c2 += (a == 0)
+		c2 += (b == 1)
+		c3 += (b == 0)
+		c3 += (c == 1)
 		max_class = max(c1, c2, c3)
 		if(c1 == max_class):
 			a = 1
