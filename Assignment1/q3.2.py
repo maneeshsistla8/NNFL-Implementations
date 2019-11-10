@@ -2,8 +2,9 @@ import pandas as pd
 import numpy as np 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.cm as cm
 
-def RidgeStocGradDescent(data, theta, iters, alpha):
+def RidgeSGD(data, theta, iters, alpha):
 	costs = []
 	weights = []
 	m = len(data)
@@ -28,12 +29,14 @@ data = (data - data.mean())/data.std()
 data = np.c_[np.ones(data.shape[0]), data]
 data = pd.DataFrame(data)
 data.columns = ['x0', 'x1', 'x2', 'y']
+X = np.array(data.loc[:,['x0', 'x1', 'x2']])
+Y = np.array(data['y'])
 
 theta = [0, 0, 0]
 alpha = 0.01
 iters = 1000
 
-costs, weights = RidgeStocGradDescent(data, theta, iters, alpha)
+costs, weights = RidgeSGD(data, theta, iters, alpha)
 theta = weights[-1]
 cost = costs[-1]
 print(cost)
@@ -54,10 +57,30 @@ z = np.array(to_plot[:,0]).flatten()
 x = np.array(to_plot[:,1]).flatten()
 y = np.array(to_plot[:,2]).flatten()
 
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-ax.plot_trisurf(x, y, z)
+w1 = [i[1] for i in weights]
+w2 = [i[2] for i in weights]
+fig2 = plt.figure()
+ax = fig2.add_subplot(111,projection = '3d')
+ww1 = np.linspace(min(w1)-0.2,max(w1)+0.2,100)
+ww2 = np.linspace(min(w2)-0.2,max(w2)+0.2,100)
+W = np.zeros([3,1])
+J_cont = np.zeros([len(ww1),len(ww2)])
+
+for i1,w_1 in enumerate(ww1):
+	for i2,w_2 in enumerate(ww2):
+		W[0] = weights[-1][0]
+		W[1] = w_1
+		W[2] = w_2
+		h_x = np.dot(X,W)
+		temp = np.array(h_x).ravel() - np.array(Y).ravel()
+		J_cont[i1][i2] = (1/(2*len(Y))) * np.sum(temp**2)	
+
+v = np.squeeze(costs)
+www1,www2 = np.meshgrid(ww1,ww2)
+www_1,www_2 = np.squeeze(ww1), np.squeeze(ww2)
+plt.plot(x, y, z,'r-,',zorder = 10)
+ax.plot_surface(www1,www2,J_cont,cmap=cm.coolwarm)
 ax.set_xlabel('W1')
 ax.set_ylabel('W2')
-ax.set_zlabel('Cost')
+ax.set_zlabel('Cost function')
 plt.show()

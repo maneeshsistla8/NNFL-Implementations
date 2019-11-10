@@ -95,8 +95,8 @@ for i in range(5):
 	theta_3 = LogisticRegression(train, theta, iters, alpha, 3)
 	a1, a2, a3, a = Accuracy(test, theta_1, theta_2, theta_3)
 	final_accuracy += a
-	print("Individual class accuracies for iteration {}: {}, {}, {}".format(i+1, a1, a2, a3))
-	print("One vs All overall accuracy for iteration {}: {}".format(i+1, a))
+	print("Individual class accuracies for fold {}: {}, {}, {}".format(i+1, a1, a2, a3))
+	print("One vs All overall accuracy for fold {}: {}".format(i+1, a))
 
 final_accuracy /= 5
 print("Average overall accuracy: {}".format(final_accuracy))

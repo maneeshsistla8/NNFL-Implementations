@@ -1,8 +1,6 @@
 import pandas as pd
 import numpy as np
 import random
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 import math
 
 def MaximumLikelihood(test, train):
@@ -31,8 +29,7 @@ def MaximumLikelihood(test, train):
 		test_data_point = np.array(test_data_features.iloc[i, :])
 		likelihood_1 = tomul_1 * np.exp(-0.5 * np.dot(np.dot((test_data_point - mean_train1), np.linalg.inv(cov_1)),(test_data_point - mean_train1)))
 		likelihood_2 = tomul_2 * np.exp(-0.5 * np.dot(np.dot((test_data_point - mean_train2), np.linalg.inv(cov_2)),(test_data_point - mean_train2)))
-		likelihood_3 = tomul_3 * np.exp(-0.5 * np.dot(np.dot((test_data_point - mean_train3), np.linalg.inv(cov_3)),(test_data_point - mean_train3)))
-		
+		likelihood_3 = tomul_3 * np.exp(-0.5 * np.dot(np.dot((test_data_point - mean_train3), np.linalg.inv(cov_3)),(test_data_point - mean_train3)))	
 		max_lh = max(likelihood_1, likelihood_2, likelihood_3) 
 
 		if(max_lh == likelihood_1):
@@ -57,7 +54,6 @@ data = pd.read_excel('data4.xlsx')
 data = pd.DataFrame(data)
 to_norm = data.iloc[:, 1:-1]
 data.iloc[:, 1:-1] = (to_norm - to_norm.mean())/to_norm.std()
-
 train = data.sample(frac=0.7, random_state=random.randint(1,1000))
 test = data.drop(train.index)
 train.rename(columns={train.columns[-1]:'label'}, inplace=True)
